@@ -22,10 +22,14 @@ public class CustomShutdownStrategy extends DefaultShutdownStrategy {
 		Collection<InflightExchange> inflightExchanges = context.getInflightRepository().browse();
 
 		for (InflightExchange inflightExchange : inflightExchanges) {
-			LOG.info("Inflight messages: " + inflightExchange.getExchange().getIn().getBody());
+			handleInflightExchange(inflightExchange);
 		}
 
 		LOG.info("*** doShutdown() started ***");
 		return super.doShutdown(context, routes, timeout, timeUnit, suspendOnly, abortAfterTimeout, forceShutdown);
+	}
+
+	public void handleInflightExchange(InflightExchange inflightExchange) {
+		LOG.info("*** Handle Inflight messages: " + inflightExchange.getExchange().getIn().getBody());
 	}
 }
