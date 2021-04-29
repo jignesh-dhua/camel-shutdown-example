@@ -18,7 +18,7 @@ public class CustomRoutePolicy extends RoutePolicySupport implements CamelContex
 	private CamelContext camelContext;
 
 	@Autowired
-	ShutdownManager shutdownManager;
+	private ShutdownManager shutdownManager;
 
 	@Override
 	public void onExchangeBegin(Route route, Exchange exchange) {
@@ -42,18 +42,18 @@ public class CustomRoutePolicy extends RoutePolicySupport implements CamelContex
 	}
 	@Override
 	public void onStart(Route route) {
-		log.info("#### Starting the route ####");
+		log.info("#### Route onStart() ####");
 		super.onStart(route);
 	}
 	@Override
 	public void shutdown() throws Exception {
-		log.info("#### Shutdown ####");
+		log.info("#### Route shutdown() ####");
 		super.shutdown();
 	}
 	
 	@Override
 	public void onStop(Route route) {
-		log.info("#### Stoping the route ####");
+		log.info("#### Route onStop() ####");
 		super.onStop(route);
 	}
 

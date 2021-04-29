@@ -1,1 +1,1 @@
-# camel-shutdown-example
+# Camel Shutdown Example

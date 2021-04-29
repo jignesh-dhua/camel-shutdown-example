@@ -1,42 +1,40 @@
 package com.oup.integration.demo.route;
 
-import java.util.Collection;
+import com.oup.integration.demo.config.AbstractRouteBuilder;
 
-import org.apache.camel.spi.InflightRepository.InflightExchange;
+import org.apache.camel.Exchange;
 import org.springframework.stereotype.Component;
 
-import com.oup.integration.demo.config.CustomRoutePolicy;
-
 @Component
-public class TimerRoute extends OupRouteBuilder {
+public class TimerRoute extends AbstractRouteBuilder {
 
-	
-	public TimerRoute(CustomRoutePolicy CustomRoutePolicy) {
-		super(CustomRoutePolicy);
-	}
 	
 	@Override
 	public void configure() throws Exception {
 
-		onCompletion().process(e->{
-			 Collection<InflightExchange> inflightExchanges = e.getContext().getInflightRepository().browse();
-			 for (InflightExchange inflightExchange : inflightExchanges) {
-				log.info("----- Inflight messages::" + inflightExchange.getExchange().getIn().getBody());
-			}
-		});
-		
-		from("timer://test123?repeatCount=1")
-		
-		
-		
+		onException(IllegalAccessException.class)
+			.log("*** Error occured *** ")
+			.handled(true);
+
+		from("timer://foo?repeatCount=1")
 		.routeId(getClass().getName())
 		.setBody(constant("Hello World"))
 		.log("*** Timer started ***")
-		.delay(500000)
-		//.throwException(new Exception("Something wrong"))
+		.delay(5000)
 		
-		.to("file://C:/Test")
+		.throwException(new IllegalAccessException("Something is wrong"))		
+		.to("file://Test")
 		.log("*** Done ***");
 		
+	}
+
+	@Override
+	public void onSuccess(Exchange exchange) {
+		log.info("*** onSuccess() ***");
+	}
+
+	@Override
+	public void onFailure(Exchange exchange) {
+		log.info("*** onFailure() ***");
 	}
 }
