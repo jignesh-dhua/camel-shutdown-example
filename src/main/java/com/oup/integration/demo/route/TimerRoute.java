@@ -13,18 +13,18 @@ public class TimerRoute extends AbstractRouteBuilder {
 	public void configure() throws Exception {
 
 		onException(IllegalAccessException.class)
-			.log("*** Error occured *** ")
-			.handled(true);
+			.log("*** onException() *** ");
 
 		from("timer://foo?repeatCount=1")
-		.routeId(getClass().getName())
-		.setBody(constant("Hello World"))
-		.log("*** Timer started ***")
-		.delay(5000)
+			.routeId(getClass().getName())
+			.setBody(constant("Hello World"))
+			.log("*** Timer started ***")
+			.delay(5000)
 		
-		.throwException(new IllegalAccessException("Something is wrong"))		
-		.to("file://Test")
-		.log("*** Done ***");
+			.throwException(new IllegalAccessException("Something is wrong"))		
+		
+			.to("file://Test")
+			.log("*** Done ***");
 		
 	}
 
