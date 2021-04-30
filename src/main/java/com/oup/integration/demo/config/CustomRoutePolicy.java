@@ -7,7 +7,6 @@ import org.apache.camel.Route;
 import org.apache.camel.support.RoutePolicySupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -17,8 +16,6 @@ public class CustomRoutePolicy extends RoutePolicySupport implements CamelContex
 
 	private CamelContext camelContext;
 
-	@Autowired
-	private ShutdownManager shutdownManager;
 
 	@Override
 	public void onExchangeBegin(Route route, Exchange exchange) {
@@ -31,11 +28,9 @@ public class CustomRoutePolicy extends RoutePolicySupport implements CamelContex
 		Object exception = exchange.getProperty(Exchange.EXCEPTION_CAUGHT);
 		if (exception != null || exchange.getException() != null) {
 			log.error("FINISHED PROCESSING MESSAGES/FILES: FAILURE");
-			shutdownManager.initiateShutdown(1);
 
 		} else {
 			log.info("FINISHED PROCESSING MESSAGES/FILES: SUCCESS");
-			shutdownManager.initiateShutdown(0);
 		}
 
 		super.onExchangeDone(route, exchange);
