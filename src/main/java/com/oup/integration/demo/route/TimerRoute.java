@@ -19,7 +19,7 @@ public class TimerRoute extends AbstractRouteBuilder {
 			.routeId(getClass().getName())
 			.setBody(constant("Hello World"))
 			.log("*** Timer started ***")
-			.delay(5000)
+			.delay(50000)
 		
 			.throwException(new IllegalAccessException("Something is wrong"))		
 		
